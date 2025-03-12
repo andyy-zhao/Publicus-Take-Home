@@ -1,0 +1,22 @@
+# Ignore Terraform files
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore Cloud Function dependencies
+cloud-function/.env
+
+# Ignore Terraform plan files
+*.tfplan
+
+# Ignore any credentials files (ensure these are securely stored and not committed)
+*.json
+
+venv
+
+tmp/

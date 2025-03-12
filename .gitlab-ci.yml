@@ -1,0 +1,36 @@
+stages:
+  - validate
+  - deploy
+
+variables:
+  PROJECT_ID: $PROJECT_ID
+  FUNCTION_BUCKET: "log_processor_bucket"
+  FUNCTION_NAME: "log-processor"
+  REGION: "us-central1"
+  BIGQUERY_DATASET: "logs_dataset"
+  BIGQUERY_TABLE: "logs_table"
+
+image: 
+  name: hashicorp/terraform:light
+  entrypoint: [""]
+
+before_script:
+  - mkdir -p ./tmp
+  - echo $CREDENTIALS > ./tmp/credentials.json
+  - rm -rf .terraform
+
+validate:
+  stage: validate
+  script:
+    - cd terraform/
+    - terraform init
+    - terraform validate
+
+deploy:
+  stage: deploy
+  script:
+    - cd terraform/
+    - terraform init
+    - terraform apply -auto-approve -var "PROJECT_ID=$PROJECT_ID" -var "GOOGLE_APPLICATION_CREDENTIALS=../tmp/credentials.json"
+  only:
+    - main
